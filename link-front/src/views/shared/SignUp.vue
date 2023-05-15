@@ -24,24 +24,6 @@
       <SecondStep v-else />
     </form>
   </NotConnectedSlot>
-
-  <footer class="px-44 pt-40 pb-16 bg-black">
-    <hr />
-    <div class="mt-11 flex justify-between items-center px-4">
-      <img src="@/assets/logo-white.png" />
-      <div class="flex items-center gap-4">
-        <a href="">
-          <img src="@/assets/icons/twitter.svg" class="w-8" />
-        </a>
-        <a href="">
-          <img src="@/assets/icons/facebook.svg" class="w-8" />
-        </a>
-        <a href="">
-          <img src="@/assets/icons/instagram.svg" class="w-8" />
-        </a>
-      </div>
-    </div>
-  </footer>
 </template>
 
 <script lang="ts">

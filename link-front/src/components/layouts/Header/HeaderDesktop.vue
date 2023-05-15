@@ -5,6 +5,14 @@
         <img src="@/assets/logo.png" al="Logo" class="h-16" />
       </router-link>
       <ul class="flex gap-10">
+        <MenuDropDown
+          label="Talents"
+          icon="arrow-down"
+          type="text"
+          position="left"
+          :items="dropDownItems"
+          class="font-semibold"
+        />
         <template v-for="item of headerItems" :key="item">
           <HeaderItem :item="item" class="font-semibold" />
         </template>
@@ -23,8 +31,8 @@
 
       <MenuDropDown
         v-if="getId"
-        button="Mon compte"
-        buttonIcon="arrow-down-white"
+        label="Mon compte"
+        icon="arrow-down-white"
         :items="menuItems"
         :footerItems="footerItems"
         @logout="logout"
@@ -72,22 +80,6 @@ export default defineComponent({
     return {
       headerItems: [
         {
-          name: "Musicien",
-          link: "",
-        },
-        {
-          name: "Vidéaste",
-          link: "",
-        },
-        {
-          name: "Beatmaker",
-          link: "",
-        },
-        {
-          name: "Chanteur",
-          link: "",
-        },
-        {
           name: "Communauté",
           link: "",
         },
@@ -126,6 +118,34 @@ export default defineComponent({
           icon: "logout",
           action: "event",
           link: "logout",
+        },
+      ] as DopDownItems[],
+
+      dropDownItems: [
+        {
+          label: "Chanteur",
+          action: "redirect",
+          link: "/",
+        },
+        {
+          label: "Musicien",
+          action: "redirect",
+          link: "/",
+        },
+        {
+          label: "Beatmaker",
+          action: "redirect",
+          link: "/",
+        },
+        {
+          label: "Clipper - Monteur",
+          action: "redirect",
+          link: "/",
+        },
+        {
+          label: "Graphiste",
+          action: "redirect",
+          link: "/",
         },
       ] as DopDownItems[],
     };

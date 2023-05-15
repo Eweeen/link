@@ -35,31 +35,20 @@
 
             <div class="flex flex-col gap-2">
               <div class="flex gap-1 items-center">
+                <!-- Notes -->
                 <div
-                  class="border border-white border-2 p-0.5 w-4 h-4 rounded-full"
+                  v-for="i in 5"
+                  :key="i"
+                  class="bg-black border-white p-0.5 border-2 w-4 h-4 rounded-full"
                 >
-                  <div class="w-full h-full bg-white rounded-full"></div>
+                  <div class="w-full h-full rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-white"
+                      :class="i === 5 ? 'w-[60%]' : 'w-full'"
+                    ></div>
+                  </div>
                 </div>
-                <div
-                  class="border border-white border-2 p-0.5 w-4 h-4 rounded-full"
-                >
-                  <div class="w-full h-full bg-white rounded-full"></div>
-                </div>
-                <div
-                  class="border border-white border-2 p-0.5 w-4 h-4 rounded-full"
-                >
-                  <div class="w-full h-full bg-white rounded-full"></div>
-                </div>
-                <div
-                  class="border border-white border-2 p-0.5 w-4 h-4 rounded-full"
-                >
-                  <div class="w-full h-full bg-white rounded-full"></div>
-                </div>
-                <div
-                  class="border border-white border-2 p-0.5 w-4 h-4 rounded-full"
-                >
-                  <div class="w-full h-full bg-white rounded-full"></div>
-                </div>
+
                 <span class="ml-1">(96 avis)</span>
               </div>
               <div class="flex gap-1 items-center justify-center">

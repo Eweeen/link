@@ -30,12 +30,6 @@
         >
           Se connecter
         </button>
-        <button
-          class="w-full p-3 border border-2 border-white flex items-center gap-2 rounded-full"
-        >
-          <img src="@/assets/img/google.png" class="w-6 h-6" />
-          Se connecter avec Google
-        </button>
       </div>
 
       <div class="w-full flex flex-col gap-4 mt-10">
@@ -49,24 +43,6 @@
       </div>
     </form>
   </NotConnectedSlot>
-
-  <footer class="px-44 pt-40 pb-16 bg-black">
-    <hr />
-    <div class="mt-11 flex justify-between items-center px-4">
-      <img src="@/assets/logo-white.png" />
-      <div class="flex items-center gap-4">
-        <a href="">
-          <img src="@/assets/icons/twitter.svg" class="w-8" />
-        </a>
-        <a href="">
-          <img src="@/assets/icons/facebook.svg" class="w-8" />
-        </a>
-        <a href="">
-          <img src="@/assets/icons/instagram.svg" class="w-8" />
-        </a>
-      </div>
-    </div>
-  </footer>
 </template>
 
 <script lang="ts">
