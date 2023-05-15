@@ -15,18 +15,21 @@ export class UsersService {
   }
 
   async signUp(signUpRequest: SignUpDto): Promise<User> {
-    return await this.usersRepository().save({
+    const user = await this.usersRepository().save({
       lastname: signUpRequest.lastname,
       firstname: signUpRequest.firstname,
       username: signUpRequest.username,
       email: signUpRequest.email,
       password: hashSync(signUpRequest.password, 10),
-      image: 'default.webp',
+      // image: 'default.webp',
       birth_date: signUpRequest.birth_date,
       city: signUpRequest.city,
-      zip: signUpRequest.zip,
+      color: '#000000',
       role: { id: 3 },
+      profession: { id: signUpRequest.profession_id },
     });
+
+    return await this.findOne(user.id);
   }
 
   async findAll(page?: number): Promise<PaginatedUsers> {
@@ -75,7 +78,6 @@ export class UsersService {
       image: updateRequest.image,
       birth_date: updateRequest.birth_date,
       city: updateRequest.city,
-      zip: updateRequest.zip,
     });
 
     return await this.findOne(id);
@@ -122,7 +124,6 @@ export class UsersService {
         'image',
         'birth_date',
         'city',
-        'zip',
       ],
       where: [{ username: username }, { email: Equal(username) }],
       relations: {

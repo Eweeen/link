@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class SignUpDto {
   @ApiProperty({ name: 'lastname' })
@@ -27,6 +33,11 @@ export class SignUpDto {
   @IsString()
   password: string;
 
+  // @ApiProperty({ name: 'image' })
+  // @IsNotEmpty()
+  // @IsString()
+  // image: string;
+
   @ApiProperty({ name: 'birth_date' })
   @IsNotEmpty()
   @IsDateString()
@@ -37,8 +48,13 @@ export class SignUpDto {
   @IsString()
   city: string;
 
-  @ApiProperty({ name: 'zip' })
+  @ApiProperty({ name: 'color' })
   @IsNotEmpty()
   @IsString()
-  zip: string;
+  color: string;
+
+  @ApiProperty({ name: 'profession_id' })
+  @IsNotEmpty()
+  @IsNumber()
+  profession_id: number;
 }

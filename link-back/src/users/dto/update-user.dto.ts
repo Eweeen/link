@@ -53,10 +53,4 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsString()
   city: string;
-
-  @ApiProperty({ name: 'zip' })
-  @IsOptional()
-  @IsNotEmpty()
-  @IsString()
-  zip: string;
 }

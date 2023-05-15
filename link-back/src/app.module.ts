@@ -12,6 +12,12 @@ import { SeederCommand } from './database/seeder';
 import { RoleModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
+import { GenresModule } from './genres/genres.module';
+import { GenresUsersModule } from './genres-users/genres-users.module';
+import { InspirationsModule } from './inspirations/inspirations.module';
+import { GenresService } from './genres/genres.service';
+import { GenresUsersService } from './genres-users/genres-users.service';
+import { InspirationsService } from './inspirations/inspirations.service';
 
 @Global()
 @Module({
@@ -37,6 +43,9 @@ import { UsersService } from './users/users.service';
     AuthModule,
     RoleModule,
     UsersModule,
+    GenresModule,
+    GenresUsersModule,
+    InspirationsModule,
   ],
   providers: [
     // ? Use the ThrottlerGuard to prevent too many requests from the same IP.
@@ -45,9 +54,18 @@ import { UsersService } from './users/users.service';
       useClass: ThrottlerGuard,
     },
     UsersService,
+    GenresService,
+    GenresUsersService,
+    InspirationsService,
     SeederCommand,
   ],
-  exports: [UsersService, SeederCommand],
+  exports: [
+    UsersService,
+    GenresService,
+    GenresUsersService,
+    InspirationsService,
+    SeederCommand,
+  ],
   controllers: [AppController],
 })
 @UseFilters(HttpExceptionFilter)

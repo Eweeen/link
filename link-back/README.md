@@ -3,13 +3,13 @@
 ## Installer les dépendances
 
 ```sh
-$ npm install
+$ pnpm install
 ```
 
 ## Lancer le back
 
 ```sh
-$ npm run start:dev
+$ pnpm start:dev
 ```
 
 ### Générer une nouvelle migration
@@ -17,12 +17,13 @@ $ npm run start:dev
 Pour générer un nouveau fichier de migration, executez la commande suivante :
 
 ```sh
-$ npm run build
-$ npm run typeorm migration:generate migration_name
+$ pnpm build
+$ pnpm typeorm migration:generate migration_name
 ```
 
 ### Effectuer les migrations
 
 ```sh
-$ npm run typeorm migration:run
+$ pnpm build
+$ pnpm typeorm migration:run
 ```

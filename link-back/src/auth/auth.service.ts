@@ -71,7 +71,6 @@ export class AuthService {
       image: user.image,
       birth_date: user.birth_date,
       city: user.city,
-      zip: user.zip,
       role: user.role.label,
     };
 

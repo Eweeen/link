@@ -12,29 +12,75 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/auth.decorator';
-import { SignUpDto } from './dto/sign-up.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
+import { SignUp } from './users.interface';
+import { SignUpDto } from './dto/sign-up.dto';
+import { GenresService } from 'src/genres/genres.service';
+import { GenresUsersService } from 'src/genres-users/genres-users.service';
+import { InspirationsService } from 'src/inspirations/inspirations.service';
+import { CreateInspirationDto } from 'src/inspirations/dto/create-inspiration.dto';
 
 @ApiTags('Users')
 @Controller({ version: '1', path: 'users' })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly genresService: GenresService,
+    private readonly genresUsersService: GenresUsersService,
+    private readonly inspirationsService: InspirationsService,
+  ) {}
 
   @Post('sign-up')
   @HttpCode(201)
-  async signUp(@Body() signUpRequest: SignUpDto): Promise<User> {
+  async signUp(@Body() signUpRequest: SignUp) {
     const isEmailUsed = await this.usersService.findOneByEmail(
       signUpRequest.email,
     );
 
-    if (isEmailUsed)
+    if (isEmailUsed) {
       throw new HttpException(
-        `Un utilisateur avec le même e-mail existe déjà`,
+        `Un utilisateur avec le même e-mail existe déjà.`,
         HttpStatus.CONFLICT,
       );
+    }
 
-    return await this.usersService.signUp(signUpRequest);
+    const genre = await this.genresService.findOne(signUpRequest.genre_id);
+
+    if (!genre) {
+      throw new HttpException(`Le genre n'existe pas.`, HttpStatus.NOT_FOUND);
+    }
+
+    // Build DTO
+    const signUpDto = new SignUpDto();
+    signUpDto.lastname = signUpRequest.lastname;
+    signUpDto.firstname = signUpRequest.firstname;
+    signUpDto.username = signUpRequest.username;
+    signUpDto.email = signUpRequest.email;
+    signUpDto.password = signUpRequest.password;
+    signUpDto.birth_date = new Date(signUpRequest.birth_date);
+    signUpDto.city = signUpRequest.city;
+    signUpDto.profession_id = signUpRequest.profession_id;
+
+    const user = await this.usersService.signUp(signUpDto);
+
+    await this.genresUsersService.create({
+      genre_id: genre.id,
+      user_id: user.id,
+    });
+
+    const createInspirations = [];
+
+    for (const inspiration of signUpRequest.inspirations) {
+      const inspirationsDto = new CreateInspirationDto();
+      inspirationsDto.name = inspiration;
+      inspirationsDto.user_id = user.id;
+      createInspirations.push(this.inspirationsService.create(inspirationsDto));
+    }
+
+    await Promise.all(createInspirations);
+
+    return user;
   }
 
   @Get()

@@ -1,7 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GenreUser } from 'src/genres-users/entities/genre-user.entity';
+import { Genre } from 'src/genres/entities/genre.entity';
+import { Inspiration } from 'src/inspirations/entities/inspiration.entity';
+import { Profession } from 'src/professions/entities/profession.entity';
 import { Role } from 'src/roles/entities/role.entity';
+import { Skill } from 'src/skills/entities/skill.entity';
 import { User } from 'src/users/entities/user.entity';
 
 @Module({
@@ -19,7 +24,15 @@ import { User } from 'src/users/entities/user.entity';
           socketPath: process.env.DB_SOCKET,
         },
         // Put in entities every entity of the application
-        entities: [Role, User],
+        entities: [
+          Role,
+          User,
+          Profession,
+          Genre,
+          GenreUser,
+          Skill,
+          Inspiration,
+        ],
         subscribers: [],
         autoLoadEntities: true,
       }),

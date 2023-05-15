@@ -26,6 +26,6 @@ done
 clear
 echo "#############  Seeding in progress... #############"
 npx nestjs-command seed
-clear
+# clear
 echo "#############  Seeding done #############"
 echo ""

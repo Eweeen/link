@@ -31,7 +31,6 @@ export const JwtUser = createParamDecorator(
       user.image = decodedToken['image'];
       user.birth_date = decodedToken['birth_date'];
       user.city = decodedToken['city'];
-      user.zip = decodedToken['zip'];
       user.role = new Role();
       return user;
     } catch (e) {

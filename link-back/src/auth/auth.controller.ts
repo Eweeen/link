@@ -21,7 +21,7 @@ export class AuthController {
   public constructor(private readonly authService: AuthService) {}
 
   @Post()
-  @Throttle(20, 300) // 20 requests max every 5 minutes for the same IP
+  // @Throttle(20, 300) // 20 requests max every 5 minutes for the same IP
   async login(@Body() authDto: AuthDto, @Res() res: Response) {
     const response = await this.authService.login(authDto);
     if (response instanceof TokenModel) {
@@ -57,11 +57,6 @@ export class AuthController {
       } else {
         throw new HttpException(response, response.statusCode);
       }
-    } else {
-      throw new HttpException(
-        `Demande d'envoi sans cookies`,
-        HttpStatus.NOT_FOUND,
-      );
     }
   }
 

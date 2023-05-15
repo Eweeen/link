@@ -1,5 +1,9 @@
 import { config } from 'dotenv';
+import { GenreUser } from 'src/genres-users/entities/genre-user.entity';
+import { Inspiration } from 'src/inspirations/entities/inspiration.entity';
+import { Profession } from 'src/professions/entities/profession.entity';
 import { Role } from 'src/roles/entities/role.entity';
+import { Skill } from 'src/skills/entities/skill.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +11,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -60,6 +65,19 @@ export class User {
   username: string;
 
   @Column({
+    name: 'short_description',
+    type: 'varchar',
+    nullable: true,
+    transformer: new EncryptionTransformer({
+      key: process.env.USER_SHORT_DESCRIPTION_ENCRYPTION_KEY,
+      algorithm: process.env.ENCRYPTION_ALGORITHM,
+      ivLength: +process.env.ENCRYPTION_IV_LENGTH,
+      iv: process.env.USER_SHORT_DESCRIPTION_ENCRYPTION_IV,
+    }),
+  })
+  short_description: string;
+
+  @Column({
     name: 'description',
     type: 'text',
     nullable: true,
@@ -102,12 +120,12 @@ export class User {
     name: 'image',
     type: 'varchar',
     nullable: false,
-    transformer: new EncryptionTransformer({
+    default: new EncryptionTransformer({
       key: process.env.USER_IMAGE_ENCRYPTION_KEY,
       algorithm: process.env.ENCRYPTION_ALGORITHM,
       ivLength: +process.env.ENCRYPTION_IV_LENGTH,
       iv: process.env.USER_IMAGE_ENCRYPTION_IV,
-    }),
+    }).to('default.webp'),
   })
   image: string;
 
@@ -132,17 +150,17 @@ export class User {
   city: string;
 
   @Column({
-    name: 'zip',
+    name: 'color',
     type: 'varchar',
     nullable: false,
     transformer: new EncryptionTransformer({
-      key: process.env.USER_ZIP_ENCRYPTION_KEY,
+      key: process.env.USER_COLOR_ENCRYPTION_KEY,
       algorithm: process.env.ENCRYPTION_ALGORITHM,
       ivLength: +process.env.ENCRYPTION_IV_LENGTH,
-      iv: process.env.USER_ZIP_ENCRYPTION_IV,
+      iv: process.env.USER_COLOR_ENCRYPTION_IV,
     }),
   })
-  zip: string;
+  color: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -166,6 +184,12 @@ export class User {
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
+  @ManyToOne(() => Profession, (profession) => profession.users, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'profession_id' })
+  profession: Profession;
+
   //+++++++++++++++
   // One To One
   //+++++++++++++++
@@ -173,4 +197,12 @@ export class User {
   //+++++++++++++++
   // One To Many
   //+++++++++++++++
+  @OneToMany(() => GenreUser, (genreUser) => genreUser.genre)
+  genreUsers: GenreUser[];
+
+  @OneToMany(() => Skill, (skill) => skill.user)
+  skills: Skill[];
+
+  @OneToMany(() => Inspiration, (inspiration) => inspiration.user)
+  inspirations: Inspiration[];
 }
