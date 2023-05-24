@@ -17,6 +17,10 @@ export class GenresService {
     });
   }
 
+  async findAll(): Promise<Genre[]> {
+    return await this.genresRepository().find();
+  }
+
   async findOne(id: number): Promise<Genre> {
     return await this.genresRepository().findOne({
       where: { id },

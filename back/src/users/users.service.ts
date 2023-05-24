@@ -21,7 +21,7 @@ export class UsersService {
       username: signUpRequest.username,
       email: signUpRequest.email,
       password: hashSync(signUpRequest.password, 10),
-      // image: 'default.webp',
+      image: 'default.webp',
       birth_date: signUpRequest.birth_date,
       city: signUpRequest.city,
       color: '#000000',

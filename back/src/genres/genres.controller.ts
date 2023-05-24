@@ -23,6 +23,11 @@ export class GenresController {
     return await this.genresService.create({ name: req.name });
   }
 
+  @Get()
+  async findAll(): Promise<Genre[]> {
+    return await this.genresService.findAll();
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Genre> {
     return await this.genresService.findOne(id);
