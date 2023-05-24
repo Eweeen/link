@@ -1,23 +1,44 @@
 <template>
   <NotConnectedSlot title="Se connecter">
+    <div v-if="feedback" class="w-[300px] py-2 px-4 rounded bg-red-600 mb-6">
+      {{ feedback }}
+    </div>
+
     <form
       @submit.prevent="submit"
       class="flex flex-col gap-5 w-full lg:w-fit lg:min-w-[300px]"
     >
-      <input
-        v-model="login.username"
-        type="text"
-        placeholder="Pseudo ou adresse mail"
-        class="bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
-      />
-      <div class="flex flex-col gap-1">
+      <div class="w-full">
         <input
-          v-model="login.password"
-          type="password"
-          placeholder="Mot de passe"
-          class="bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
-          @keypress.enter="submit"
+          v-model="login.username"
+          type="text"
+          placeholder="Pseudo ou adresse mail"
+          class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
         />
+        <p class="text-red-600">{{ errors.username }}</p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <div class="relative w-full">
+          <input
+            v-model="login.password"
+            :type="visible ? 'text' : 'password'"
+            placeholder="Mot de passe"
+            class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
+            @keypress.enter="submit"
+          />
+          <img
+            :src="
+              require(`@/assets/icons/linear/${
+                visible ? 'eye-slash-white' : 'eye-white'
+              }.svg`)
+            "
+            class="absolute top-0 right-0 cursor-pointer"
+            @click="visible = !visible"
+          />
+          <p class="text-red-600">{{ errors.username }}</p>
+        </div>
+
         <router-link to="" class="text-sm text-stone-300 underline">
           Mot de passe oublié
         </router-link>
@@ -60,6 +81,8 @@ export default defineComponent({
       login: new LoginDto(),
       errors: {} as Record<string, unknown>,
       loading: false,
+      visible: false,
+      feedback: "",
     };
   },
   methods: {
@@ -82,7 +105,7 @@ export default defineComponent({
       // Error when login
       if (error) {
         if (error?.statusCode === 401) {
-          console.log(error.message);
+          this.feedback = error.message;
         } else {
           console.log(error.message);
         }

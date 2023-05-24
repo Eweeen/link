@@ -6,7 +6,7 @@ export default abstract class BaseModel {
     return this.setError(result);
   }
 
-  public setError(result: ValidationError[]): Record<string, unknown> {
+  public setError(result: ValidationError[]): Record<string, string> {
     const propBag = {};
     for (const error of result) {
       for (const key in error.constraints) {

@@ -20,8 +20,8 @@
         </div>
       </div>
 
-      <FirstStep v-if="!nextStep" @next="nextStep = true" />
-      <SecondStep v-else />
+      <FirstStep v-if="!nextStep" @next="next" />
+      <SecondStep v-else @create="createUser" />
     </form>
   </NotConnectedSlot>
 </template>
@@ -31,6 +31,8 @@ import { defineComponent } from "vue";
 import NotConnectedSlot from "@/components/pages/shared/NotConnectedSlot.vue";
 import FirstStep from "@/components/pages/shared/SignUp/FirstStep.vue";
 import SecondStep from "@/components/pages/shared/SignUp/SecondStep.vue";
+import { SignUpDto } from "@/validations/SignUp.dto";
+import { SignUpFirstStepDto } from "@/validations/SignUpFirstStepDto.dto";
 
 export default defineComponent({
   name: "link-Login",
@@ -38,9 +40,27 @@ export default defineComponent({
   data() {
     return {
       nextStep: false,
+      userForm: new SignUpDto(),
     };
+  },
+  methods: {
+    next(user: SignUpFirstStepDto) {
+      this.userForm.lastname = user.lastname;
+      this.userForm.firstname = user.firstname;
+      this.userForm.email = user.email;
+      this.userForm.password = user.password;
+      this.userForm.confirmPassword = user.confirmPassword;
+      this.userForm.birth_date = user.birth_date;
+
+      this.nextStep = true;
+    },
+    createUser() {
+      this.userForm.username = "";
+      this.userForm.city = "";
+      this.userForm.genre_id = "";
+      this.userForm.inspirations = [];
+      this.userForm.profession_id = "";
+    },
   },
 });
 </script>
-
-<style></style>

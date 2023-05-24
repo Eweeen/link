@@ -1,43 +1,93 @@
 <template>
-  <input
+  <InputComponent
+    v-model="user.lastname"
     type="text"
-    placeholder="Adresse mail*"
-    class="bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
+    placeholder="Nom*"
+    :error="errors.lastname"
+    @deleteError="errors.lastname = ''"
   />
 
-  <div class="w-full">
-    <input
-      type="password"
-      placeholder="Mot de passe*"
-      class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
-    />
-  </div>
+  <InputComponent
+    v-model="user.firstname"
+    type="text"
+    placeholder="Prénom*"
+    :error="errors.firstname"
+    @deleteError="errors.firstname = ''"
+  />
 
-  <div class="w-full">
-    <input
-      type="password"
-      placeholder="Confirmation mot de passe*"
-      class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
-    />
-  </div>
+  <InputComponent
+    v-model="user.birth_date"
+    type="date"
+    placeholder="Date de naissance*"
+    :error="errors.birth_date"
+    @deleteError="errors.birth_date = ''"
+  />
 
-  <button
-    class="w-full p-3 bg-white text-black rounded-full"
-    @click="$emit('next')"
-  >
+  <InputComponent
+    v-model="user.email"
+    type="email"
+    placeholder="Adresse mail*"
+    :error="errors.email"
+    @deleteError="errors.email = ''"
+  />
+
+  <InputComponent
+    v-model="user.password"
+    type="password"
+    placeholder="Mot de passe*"
+    :error="errors.password"
+    @deleteError="errors.password = ''"
+  />
+
+  <InputComponent
+    v-model="user.confirmPassword"
+    type="password"
+    placeholder="Confirmation mot de passe*"
+    :error="errors.confirmPassword"
+    @deleteError="errors.confirmPassword = ''"
+  />
+
+  <button class="w-full p-3 bg-white text-black rounded-full" @click="next">
     Suivant
   </button>
+
+  <div class="w-full flex flex-col gap-4 mt-10">
+    <h3 class="text-lg lg:text-2xl">Déjà un compte ?</h3>
+    <router-link
+      to="login"
+      class="w-full p-3 bg-white text-black rounded-full text-center"
+    >
+      Connexion
+    </router-link>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { SignUpFirstStepDto } from "@/validations/SignUpFirstStepDto.dto";
+import InputComponent from "@/components/library/InputComponent.vue";
 
 export default defineComponent({
-  name: "link-SignUp-FirstStep",
+  components: {
+    InputComponent,
+  },
   emits: ["next"],
+  data() {
+    return {
+      errors: {} as Record<string, string>,
+      user: new SignUpFirstStepDto(),
+    };
+  },
   methods: {
-    // TODO
-    // Check form and emit if data is valid
+    async next() {
+      this.errors = await this.user.validateModel();
+
+      if (Object.keys(this.errors).length > 0) {
+        return;
+      }
+
+      this.$emit("next", this.user);
+    },
   },
 });
 </script>
