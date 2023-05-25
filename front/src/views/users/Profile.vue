@@ -1,13 +1,18 @@
 <template>
-  <div class="min-h-[calc(100vh-80px)] mt-20 mx-[200px] pt-8 pb-10">
+  <div
+    v-if="!user"
+    class="min-h-[calc(100vh-80px)] mt-20 mx-[200px] pt-8 pb-10"
+  ></div>
+
+  <div v-else class="min-h-[calc(100vh-80px)] mt-20 mx-[200px] pt-8 pb-10">
     <header class="flex justify-between items-center">
-      <h1 class="text-4xl font-semibold">Bienvenue {{ getFirstname }}</h1>
-      <span
+      <h1 class="text-4xl font-semibold">Bienvenue {{ user.username }}</h1>
+      <!-- <span
         class="flex gap-2 pb-0.5 items-center whitespace-nowrap cursor-pointer border-b border-transparent hover:border-black"
       >
         <img :src="require('@/assets/icons/linear/eye.svg')" class="w-6 h-6" />
         Aperçu profil
-      </span>
+      </span> -->
     </header>
 
     <section class="mt-4 flex gap-9 mb-10">
@@ -29,13 +34,17 @@
                 src="@/assets/img/default.webp"
                 class="w-[100px] h-[100px] rounded-full mb-2"
               />
-              <h3 class="text-lg font-semibold">{{ getFullname }}</h3>
-              <p class="text-gray-200">Profession</p>
+              <h3 class="text-lg font-semibold">
+                {{ user.firstname + " " + user.lastname }}
+              </h3>
+              <p class="text-gray-200">
+                {{ user.profession.name }}
+              </p>
             </div>
 
             <div class="flex flex-col gap-2">
-              <div class="flex gap-1 items-center">
-                <!-- Notes -->
+              <!-- Notes -->
+              <!-- <div class="flex gap-1 items-center">
                 <div
                   v-for="i in 5"
                   :key="i"
@@ -50,10 +59,11 @@
                 </div>
 
                 <span class="ml-1">(96 avis)</span>
-              </div>
+              </div> -->
+
               <div class="flex gap-1 items-center justify-center">
                 <img src="@/assets/icons/linear/location-white.svg" />
-                <span class="text-lg">{{ getCity }}</span>
+                <span class="text-lg">{{ user.city }}</span>
               </div>
             </div>
           </header>
@@ -61,10 +71,7 @@
           <div class="px-6 py-8 flex flex-col gap-8">
             <div>
               <h3 class="text-xl font-semibold mb-2">Description</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum
-                sunt possimus facere molestias similique cupiditate!
-              </p>
+              <p>{{ user.short_description ?? "Aucune description" }}</p>
             </div>
             <div class="w-full h-0.5 bg-gray-400 rounded-full"></div>
             <div class="font-semibold flex flex-col gap-6">
@@ -75,7 +82,7 @@
                 </span>
                 <span>56</span>
               </div>
-              <div class="flex justify-between items-center">
+              <!-- <div class="flex justify-between items-center">
                 <span class="flex gap-1 items-center">
                   <img
                     src="@/assets/icons/linear/lamp-on.svg"
@@ -84,7 +91,7 @@
                   Projets
                 </span>
                 <span>18</span>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -191,7 +198,7 @@
           <div>
             <form action="" class="flex flex-col items-end">
               <textarea
-                :value="getDescription"
+                :value="user.description"
                 name=""
                 id=""
                 placeholder="Décrivez votre expérience et ce qu'il vous plaît par exemple"
@@ -208,18 +215,22 @@
     <!-- Compétences -->
     <section class="p-9 shadow-md rounded-3xl mb-10">
       <header class="flex justify-between items-center mb-12">
-        <h2 class="text-3xl">Mes compétences ({{ competences.length }})</h2>
-        <span class="cursor-pointer text-lg">Ajouter</span>
+        <h2 class="text-3xl">Mes compétences ({{ user.skills.length }})</h2>
+        <div>
+          <input
+            v-model="newSkill"
+            type="text"
+            class="border-2 border-black rounded-full px-4 py-2 mr-4"
+            placeholder="Tapez votre compétence"
+          />
+          <span class="cursor-pointer text-lg" @click="addSkill">Ajouter</span>
+        </div>
       </header>
+      <p v-if="user.skills.length === 0">Aucune compétence</p>
       <div class="grid grid-cols-3 gap-x-28">
-        <span
-          v-for="(c, i) in competences"
-          :key="c"
-          class="py-10"
-          :class="{ 'border-t-[2px] border-black': i > 2 }"
-        >
-          {{ c }}
-        </span>
+        <template v-for="(s, i) in user.skills" :key="s.id">
+          <SkillCard :skill="s" :index="i" @delete="removeSkill" />
+        </template>
       </div>
     </section>
 
@@ -283,48 +294,54 @@ import { User } from "@/interfaces/User";
 import Genrerale from "@/components/pages/users/Profile/Generale.vue";
 import Projets from "@/components/pages/users/Profile/Projets.vue";
 import ViewLink from "@/components/pages/users/Profile/Link.vue";
+import { getUserById } from "@/services/users";
+import { createSkill } from "@/services/skills";
+import SkillCard from "@/components/pages/users/Profile/SkillCard.vue";
 
 export default defineComponent({
   name: "link-Profile",
-  components: { Genrerale, Projets, ViewLink },
+  components: { Genrerale, Projets, ViewLink, SkillCard },
   data() {
     return {
-      user: {} as User,
+      user: null as User | null,
       stats: 1 as 1 | 2 | 3,
-      competences: [
-        "FL STUDIO",
-        "Compétences",
-        "Compétences",
-        "After effect",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-        "Compétences",
-      ],
+      newSkill: "",
     };
+  },
+  beforeMount() {
+    this.getUser(this.getId);
   },
   methods: {
     async getUser(id: number) {
-      // TODO get user
+      const { data, error } = await getUserById(id);
+
+      if (error || !data) {
+        return console.log(error);
+      }
+
+      this.user = data;
     },
     setStats(select: 1 | 2 | 3) {
       this.stats = select;
     },
+    async addSkill() {
+      if (!this.user) return;
+      if (this.newSkill === "") return;
+
+      const { data, error } = await createSkill(this.newSkill, +this.getId);
+
+      if (error || !data) return console.log(error);
+
+      this.user.skills.push(data);
+      this.newSkill = "";
+    },
+    removeSkill(index: number) {
+      if (!this.user) return;
+      this.user.skills.splice(index, 1);
+    },
   },
   computed: {
-    ...mapGetters([
-      "getId",
-      "getFirstname",
-      "getFullname",
-      "getCity",
-      "getDescription",
-    ]),
+    ...mapGetters(["getId"]),
   },
 });
 </script>

@@ -39,7 +39,7 @@
     </div>
 
     <div class="flex gap-6 lg:gap-12 items-center lg:px-2">
-      <div class="flex gap-1 lg:gap-2 items-end">
+      <div class="flex gap-1 lg:gap-2 items-center">
         <img
           :src="require('@/assets/icons/linear/location-white.svg')"
           class="w-4 h-4"

@@ -20,6 +20,8 @@ import { GenresUsersService } from './genres-users/genres-users.service';
 import { InspirationsService } from './inspirations/inspirations.service';
 import { ProfessionsModule } from './professions/professions.module';
 import { ProfessionsService } from './professions/professions.service';
+import { SkillsModule } from './skills/skills.module';
+import { SkillsService } from './skills/skills.service';
 
 @Global()
 @Module({
@@ -49,6 +51,7 @@ import { ProfessionsService } from './professions/professions.service';
     GenresUsersModule,
     InspirationsModule,
     ProfessionsModule,
+    SkillsModule,
   ],
   providers: [
     // ? Use the ThrottlerGuard to prevent too many requests from the same IP.
@@ -61,6 +64,7 @@ import { ProfessionsService } from './professions/professions.service';
     GenresUsersService,
     InspirationsService,
     ProfessionsService,
+    SkillsService,
     SeederCommand,
   ],
   exports: [
@@ -69,6 +73,7 @@ import { ProfessionsService } from './professions/professions.service';
     GenresUsersService,
     InspirationsService,
     ProfessionsService,
+    SkillsService,
     SeederCommand,
   ],
   controllers: [AppController],

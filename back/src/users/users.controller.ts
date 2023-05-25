@@ -94,4 +94,9 @@ export class UsersController {
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return await this.usersService.findOne(id);
   }
+
+  @Get('find/:username')
+  async findOneByUsername(@Param('username') username: string): Promise<User> {
+    return await this.usersService.findOneByUsername(username);
+  }
 }

@@ -50,7 +50,13 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     return await this.usersRepository().findOne({
       where: { id },
-      relations: { role: true },
+      relations: {
+        role: true,
+        profession: true,
+        inspirations: true,
+        skills: true,
+        portfolios: true,
+      },
     });
   }
 
@@ -64,7 +70,13 @@ export class UsersService {
   async findOneByUsername(username: string): Promise<User> {
     return await this.usersRepository().findOne({
       where: { username: username },
-      relations: { role: true },
+      relations: {
+        role: true,
+        profession: true,
+        inspirations: true,
+        skills: true,
+        portfolios: true,
+      },
     });
   }
 

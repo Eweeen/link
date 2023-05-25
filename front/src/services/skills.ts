@@ -1,26 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { User } from "@/interfaces/User";
+import { Skill } from "@/interfaces/Skill";
 import { APIError } from "@/interfaces/error.interface";
 import axios from "@/utils/authorizedAxiosInstance";
-import { SignUpDto } from "@/validations/SignUp.dto";
-import { stringify } from "qs";
 
 const URL_BASE = process.env.VUE_APP_API_URL
-  ? process.env.VUE_APP_API_URL.concat("users")
+  ? process.env.VUE_APP_API_URL.concat("skills")
   : "";
 
-export async function signUp(user: SignUpDto): Promise<{
-  data?: User;
+export async function createSkill(
+  name: string,
+  user_id: number
+): Promise<{
+  data?: Skill;
   error?: APIError;
 }> {
   try {
-    const formData = stringify(user);
-
     const axiosInstance = await axios();
-    const { data } = await axiosInstance.post(
-      URL_BASE.concat("/sign-up"),
-      formData
-    );
+    const { data } = await axiosInstance.post(URL_BASE, { name, user_id });
     return { data };
   } catch (error: any) {
     return {
@@ -29,13 +25,18 @@ export async function signUp(user: SignUpDto): Promise<{
   }
 }
 
-export async function getUserById(id: number): Promise<{
-  data?: User;
+export async function updateSkill(
+  id: number,
+  name: string
+): Promise<{
+  data?: Skill;
   error?: APIError;
 }> {
   try {
     const axiosInstance = await axios();
-    const { data } = await axiosInstance.get(URL_BASE.concat(`/${id}`));
+    const { data } = await axiosInstance.post(URL_BASE.concat(`/${id}`), {
+      name,
+    });
     return { data };
   } catch (error: any) {
     return {
@@ -44,15 +45,13 @@ export async function getUserById(id: number): Promise<{
   }
 }
 
-export async function getUserByUsername(username: string): Promise<{
-  data?: User;
+export async function deleteSkill(id: number): Promise<{
+  data?: Skill;
   error?: APIError;
 }> {
   try {
     const axiosInstance = await axios();
-    const { data } = await axiosInstance.get(
-      URL_BASE.concat(`/find/${username}`)
-    );
+    const { data } = await axiosInstance.delete(URL_BASE.concat(`/${id}`));
     return { data };
   } catch (error: any) {
     return {

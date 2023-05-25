@@ -99,18 +99,18 @@ export default defineComponent({
           action: "redirect",
           link: "/profile",
         },
-        {
-          label: "Mes favoris",
-          icon: "heart",
-          action: "redirect",
-          link: "",
-        },
-        {
-          label: "Paramètres de mon compte",
-          icon: "setting-2",
-          action: "redirect",
-          link: "",
-        },
+        // {
+        //   label: "Mes favoris",
+        //   icon: "heart",
+        //   action: "redirect",
+        //   link: "",
+        // },
+        // {
+        //   label: "Paramètres de mon compte",
+        //   icon: "setting-2",
+        //   action: "redirect",
+        //   link: "",
+        // },
       ] as DopDownItems[],
       footerItems: [
         {

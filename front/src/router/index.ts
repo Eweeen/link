@@ -10,6 +10,7 @@ import Main from "@/views/Main.vue";
 import Profile from "@/views/users/Profile.vue";
 import Login from "@/views/shared/Login.vue";
 import SignUp from "@/views/shared/SignUp.vue";
+import ProfileVisitor from "@/views/shared/ProfileVisitor.vue";
 import { createToken, createUserByToken, getToken } from "@/utils/tokenUtils";
 import { refreshToken } from "@/services/auth";
 import store from "@/store";
@@ -35,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/sign-up",
         name: "sign-up",
         component: SignUp,
+      },
+      {
+        path: "/user/:username",
+        name: "user",
+        component: ProfileVisitor,
       },
     ],
   },
