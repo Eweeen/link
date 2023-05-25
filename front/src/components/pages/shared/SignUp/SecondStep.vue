@@ -15,20 +15,15 @@
     @deleteError="errors.city = ''"
   />
 
-  <select
-    name=""
-    id=""
-    class="bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
-  >
-    <option value="">Profession*</option>
-  </select>
+  <ComboBox v-model="user.profession_id" :data="professions" />
 
   <ComboBox v-model="user.genre_id" :data="genres" />
 
   <div class="w-full">
     <input
+      v-model="inspirations"
       type="text"
-      placeholder="Inspirations artistes* (1 à 3)"
+      placeholder="Inspirations artistes*"
       class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
     />
   </div>
@@ -45,6 +40,8 @@ import InputComponent from "@/components/library/InputComponent.vue";
 import ComboBox from "@/components/headlessui/ComboBox.vue";
 import { getGenres } from "@/services/genres";
 import { Genre } from "@/interfaces/Genre";
+import { Profession } from "@/interfaces/Profession";
+import { getProfessions } from "@/services/professions";
 
 export default defineComponent({
   components: {
@@ -57,17 +54,32 @@ export default defineComponent({
       errors: {} as Record<string, string>,
       user: new SignUpSecondStepDto(),
       genres: [] as Genre[],
+      professions: [] as Profession[],
+      inspirations: "",
     };
   },
   async mounted() {
-    const { data, error } = await getGenres();
-    if (error || !data) return;
-    this.genres = data;
+    const [professions, genres] = await Promise.all([
+      getProfessions(),
+      getGenres(),
+    ]);
+
+    if (
+      professions.error ||
+      !professions.data ||
+      genres.error ||
+      !genres.data
+    ) {
+      return;
+    }
+
+    this.genres = genres.data;
+    this.professions = professions.data;
   },
   methods: {
     create() {
-      console.log(this.user);
-      // this.$emit("create", this.user);
+      this.user.inspirations = [this.inspirations];
+      this.$emit("create", this.user);
     },
   },
 });

@@ -33,6 +33,8 @@ import FirstStep from "@/components/pages/shared/SignUp/FirstStep.vue";
 import SecondStep from "@/components/pages/shared/SignUp/SecondStep.vue";
 import { SignUpDto } from "@/validations/SignUp.dto";
 import { SignUpFirstStepDto } from "@/validations/SignUpFirstStepDto.dto";
+import { SignUpSecondStepDto } from "@/validations/SignUpSecondStepDto.dto";
+import { signUp } from "@/services/users";
 
 export default defineComponent({
   name: "link-Login",
@@ -54,12 +56,21 @@ export default defineComponent({
 
       this.nextStep = true;
     },
-    createUser() {
-      this.userForm.username = "";
-      this.userForm.city = "";
-      this.userForm.genre_id = "";
-      this.userForm.inspirations = [];
-      this.userForm.profession_id = "";
+    async createUser(user: SignUpSecondStepDto) {
+      this.userForm.username = user.username;
+      this.userForm.city = user.city;
+      this.userForm.genre_id = user.genre_id;
+      this.userForm.inspirations = user.inspirations;
+      this.userForm.profession_id = user.profession_id;
+
+      const { error } = await signUp(this.userForm);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      this.$router.push({ name: "login" });
     },
   },
 });

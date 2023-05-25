@@ -6,15 +6,12 @@
     >
       <div class="relative mt-1">
         <div
-          class="relative w-full cursor-default overflow-hidden text-left shadow-md sm:text-sm"
+          class="relative w-full cursor-default overflow-hidden text-left shadow-md"
         >
           <ComboboxInput
-            class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 text-sm leading-5 text-white"
+            class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 text-white"
             :displayValue="(person) => person.name"
-            @change="
-              query = $event.target.value;
-              $emit('update:modelValue', $event.target.value);
-            "
+            @change="query = $event.target.value"
           />
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pb-2"
@@ -29,7 +26,7 @@
           @after-leave="query = ''"
         >
           <ComboboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm"
+            class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg"
           >
             <div
               v-if="filteredPeople.length === 0 && query !== ''"
@@ -113,6 +110,15 @@ export default defineComponent({
       selected: ref(this.data[0]),
       query: "",
     };
+  },
+  watch: {
+    data: {
+      handler() {
+        this.selected = this.data[0];
+        this.$emit("update:modelValue", this.data[0].id);
+      },
+      deep: true,
+    },
   },
   computed: {
     filteredPeople(): any[] {
