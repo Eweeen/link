@@ -1,7 +1,10 @@
 import { config } from 'dotenv';
 import { GenreUser } from 'src/genres-users/entities/genre-user.entity';
 import { Inspiration } from 'src/inspirations/entities/inspiration.entity';
+import { Message } from 'src/messages/entities/message.entity';
+import { Portfolio } from 'src/portfolios/entities/portfolio.entity';
 import { Profession } from 'src/professions/entities/profession.entity';
+import { Relation } from 'src/relations/entities/relation.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { Skill } from 'src/skills/entities/skill.entity';
 import {
@@ -205,4 +208,19 @@ export class User {
 
   @OneToMany(() => Inspiration, (inspiration) => inspiration.user)
   inspirations: Inspiration[];
+
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.user)
+  portfolios: Portfolio[];
+
+  @OneToMany(() => Relation, (relation) => relation.sender)
+  relations_sender: Relation[];
+
+  @OneToMany(() => Relation, (relation) => relation.receiver)
+  relations_receiver: Relation[];
+
+  @OneToMany(() => Message, (message) => message.sender)
+  messages_sender: Message[];
+
+  @OneToMany(() => Message, (message) => message.receiver)
+  messages_receiver: Message[];
 }

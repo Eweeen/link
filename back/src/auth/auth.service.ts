@@ -42,12 +42,6 @@ export class AuthService {
         token.email,
       );
 
-      /* TODO */
-      /* Fix error id is undefined */
-      console.log(token);
-      console.log(user);
-      /* ========================= */
-
       return this.generateTokens(user);
     } catch (e) {
       console.log(e);
