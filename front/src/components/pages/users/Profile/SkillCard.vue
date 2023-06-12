@@ -32,7 +32,7 @@
     </div>
 
     <div
-      v-else
+      v-else-if="canUpdate"
       class="absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer"
       @click="isShowUpdate = !isShowUpdate"
     >
@@ -56,6 +56,10 @@ export default defineComponent({
     index: {
       type: Number,
       required: true,
+    },
+    canUpdate: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

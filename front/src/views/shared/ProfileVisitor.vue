@@ -82,10 +82,10 @@
 
         <div class="bg-white p-10 rounded-[30px] shadow mb-16">
           <h2 class="text-2xl mb-5">Compétences</h2>
-          <div>
-            <p v-for="skill of user.skills" :key="skill.id">
-              {{ skill.name }}
-            </p>
+          <div class="grid grid-cols-3 gap-x-28">
+            <template v-for="(s, i) in user.skills" :key="s.id">
+              <SkillCard :skill="s" :index="i" />
+            </template>
             <p v-if="user.skills.length === 0">Aucune compétence</p>
           </div>
         </div>
@@ -93,26 +93,101 @@
         <div class="bg-white p-10 rounded-[30px] shadow">
           <h2 class="text-2xl mb-5">Portfolio</h2>
           <div>
-            <p v-for="portfolio of user.portfolios" :key="portfolio">
-              {{ portfolio }}
+            <!-- Image -->
+            <div v-if="images.length" class="mb-4">
+              <h3 class="text-xl mb-2">Images</h3>
+              <div class="flex flex-wrap gap-3">
+                <div
+                  v-for="i in images"
+                  :key="i.id"
+                  class="w-[220px] h-[175px] bg-gray-300 rounded flex justify-center items-center overflow-hidden cursor-pointer"
+                  @click="openModal(i)"
+                >
+                  <img v-if="i.path" :src="i.path" />
+                  <img
+                    v-else
+                    :src="require('@/assets/icons/linear/gallery.svg')"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- Vidéos -->
+            <div v-if="videos.length">
+              <h3 class="text-xl mb-2">Vidéos</h3>
+              <div class="flex justify-between flex-wrap gap-3">
+                <div v-for="i in videos" :key="i.id">
+                  <div
+                    class="w-[220px] h-[175px] bg-gray-300 rounded flex justify-center items-center"
+                  >
+                    <img
+                      :src="require('@/assets/icons/linear/video-square.svg')"
+                    />
+                  </div>
+                  <p class="ml-2">{{ i.title }}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Audios -->
+            <div v-if="musiques.length">
+              <h3 class="text-xl mb-2">Audios</h3>
+              <div class="flex justify-between flex-wrap gap-3">
+                <div
+                  v-for="i in musiques"
+                  :key="i.id"
+                  class="w-[130px] h-[100px] bg-gray-300 rounded-3xl flex flex-col gap-2 justify-center items-center"
+                >
+                  <span>Track {{ i.title }}</span>
+                  <img :src="require('@/assets/icons/linear/music.svg')" />
+                </div>
+              </div>
+            </div>
+            <!-- No data -->
+            <p
+              v-if="
+                images.length === 0 &&
+                videos.length === 0 &&
+                musiques.length === 0
+              "
+            >
+              Aucun projet
             </p>
-            <p v-if="user.portfolios.length === 0">Aucun projet</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <ViewPortfolio
+    v-if="selectPortfolio"
+    :isOpen="showPortfolio"
+    :portfolio="selectPortfolio"
+    @close="showPortfolio = false"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { getUserByUsername } from "@/services/users";
 import { User } from "@/interfaces/User";
+import SkillCard from "@/components/pages/users/Profile/SkillCard.vue";
+import { Portfolio } from "@/interfaces/Portfolio";
+import { getPortfolioImage } from "@/services/portfolios";
+import ViewPortfolio from "@/components/pages/shared/Visitor/ViewPortfolio.vue";
 
 export default defineComponent({
+  components: {
+    SkillCard,
+    ViewPortfolio,
+  },
   data() {
     return {
       user: null as User | null,
+      // Portfolio
+      images: [] as Portfolio[],
+      videos: [] as Portfolio[],
+      musiques: [] as Portfolio[],
+      showPortfolio: false,
+      selectPortfolio: null as Portfolio | null,
     };
   },
   beforeMount() {
@@ -133,6 +208,20 @@ export default defineComponent({
       }
 
       this.user = data;
+      this.images = data.portfolios.filter((p) => p.type === "image");
+      this.videos = data.portfolios.filter((p) => p.type === "video");
+      this.musiques = data.portfolios.filter((p) => p.type === "musique");
+
+      if (this.images.length) {
+        for (const i of this.images) {
+          const path = getPortfolioImage(i.id);
+          i.path = path;
+        }
+      }
+    },
+    openModal(portfolio: Portfolio) {
+      this.selectPortfolio = portfolio;
+      this.showPortfolio = true;
     },
   },
   computed: {

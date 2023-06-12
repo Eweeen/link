@@ -72,6 +72,19 @@
           </header>
 
           <div class="px-6 py-8 flex flex-col gap-8">
+            <div class="flex justify-between">
+              <div
+                v-for="i of user.inspirations"
+                :key="i.name"
+                class="flex items-center gap-2"
+              >
+                <img src="@/assets/icons/linear/label.svg" />
+                <span class="text-sm">{{ i.name }}</span>
+              </div>
+            </div>
+
+            <div class="w-full h-0.5 bg-gray-400 rounded-full"></div>
+
             <div>
               <h3 class="text-xl font-semibold mb-2">Description</h3>
               <p>{{ user.short_description ?? "Aucune description" }}</p>
@@ -232,7 +245,12 @@
       <p v-if="user.skills.length === 0">Aucune compétence</p>
       <div class="grid grid-cols-3 gap-x-28">
         <template v-for="(s, i) in user.skills" :key="s.id">
-          <SkillCard :skill="s" :index="i" @delete="removeSkill" />
+          <SkillCard
+            :skill="s"
+            :index="i"
+            :canUpdate="true"
+            @delete="removeSkill"
+          />
         </template>
       </div>
     </section>
