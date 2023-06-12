@@ -14,7 +14,7 @@ yarn-error.log*
 lerna-debug.log*
 
 # Images
-assets/portfolios/*
+public/assets/portfolios/*
 assets/users/*
 !/assets/users/default.webp
 
