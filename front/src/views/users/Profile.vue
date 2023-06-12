@@ -4,7 +4,10 @@
     class="min-h-[calc(100vh-80px)] mt-20 mx-[200px] pt-8 pb-10"
   ></div>
 
-  <div v-else class="min-h-[calc(100vh-80px)] mt-20 mx-[200px] pt-8 pb-10">
+  <div
+    v-else
+    class="min-h-[calc(100vh-80px)] mt-20 md:mx-[20px] lg:mx-[70px] xl:mx-[130px] 2xl:mx-[200px] pt-8 pb-10"
+  >
     <header class="flex justify-between items-center">
       <h1 class="text-4xl font-semibold">Bienvenue {{ user.username }}</h1>
       <!-- <span
@@ -238,53 +241,66 @@
     <section class="p-9 shadow-md rounded-3xl">
       <header class="flex justify-between items-center mb-12">
         <h2 class="text-3xl">Portfolio</h2>
-        <span class="cursor-pointer text-lg">Ajouter</span>
+        <span class="cursor-pointer text-lg hover:underline" @click="openModal">
+          Ajouter
+        </span>
       </header>
 
       <article class="flex flex-col gap-8 px-6">
         <!-- Image -->
-        <div>
+        <div v-if="images.length">
           <h3 class="text-xl mb-2">Images</h3>
-          <div class="flex justify-between">
+          <div class="flex flex-wrap gap-3">
             <div
-              v-for="i in 6"
-              :key="i"
-              class="w-[130px] h-[100px] bg-gray-300 rounded flex justify-center items-center"
+              v-for="i in images"
+              :key="i.id"
+              class="w-[130px] h-[100px] bg-gray-300 rounded flex justify-center items-center overflow-hidden"
             >
-              <img :src="require('@/assets/icons/linear/gallery.svg')" />
+              <img v-if="i.path" :src="i.path" />
+              <img v-else :src="require('@/assets/icons/linear/gallery.svg')" />
             </div>
           </div>
         </div>
         <!-- Vidéos -->
-        <div>
+        <div v-if="videos.length">
           <h3 class="text-xl mb-2">Vidéos</h3>
-          <div class="flex justify-between">
-            <div
-              v-for="i in 6"
-              :key="i"
-              class="w-[150px] h-[100px] bg-gray-300 rounded flex justify-center items-center"
-            >
-              <img :src="require('@/assets/icons/linear/video-square.svg')" />
+          <div class="flex justify-between flex-wrap gap-3">
+            <div v-for="i in videos" :key="i.id">
+              <div
+                class="w-[150px] h-[100px] bg-gray-300 rounded flex justify-center items-center"
+              >
+                <img :src="require('@/assets/icons/linear/video-square.svg')" />
+              </div>
+              <p class="ml-2">{{ i.title }}</p>
             </div>
           </div>
         </div>
         <!-- Audios -->
-        <div>
+        <div v-if="musiques.length">
           <h3 class="text-xl mb-2">Audios</h3>
-          <div class="flex justify-between">
+          <div class="flex justify-between flex-wrap gap-3">
             <div
-              v-for="i in 6"
-              :key="i"
-              class="w-[130px] h-[100px] bg-gray-300 rounded-full flex flex-col gap-2 justify-center items-center"
+              v-for="i in musiques"
+              :key="i.id"
+              class="w-[130px] h-[100px] bg-gray-300 rounded-3xl flex flex-col gap-2 justify-center items-center"
             >
-              <span>Track {{ i }}</span>
+              <span>Track {{ i.title }}</span>
               <img :src="require('@/assets/icons/linear/music.svg')" />
             </div>
           </div>
         </div>
+        <div
+          v-if="
+            images.length === 0 && videos.length === 0 && musiques.length === 0
+          "
+        >
+          <p>Aucun projet</p>
+        </div>
       </article>
     </section>
   </div>
+
+  <CreatePortfolio :isOpen="isModalOpen" @create="create" @close="closeModal" />
 </template>
 
 <script lang="ts">
@@ -297,15 +313,23 @@ import ViewLink from "@/components/pages/users/Profile/Link.vue";
 import { getUserById } from "@/services/users";
 import { createSkill } from "@/services/skills";
 import SkillCard from "@/components/pages/users/Profile/SkillCard.vue";
+import CreatePortfolio from "@/components/pages/users/Profile/CreatePortfolio.vue";
+import { Portfolio } from "@/interfaces/Portfolio";
+import { getPortfolioImage } from "@/services/portfolios";
 
 export default defineComponent({
   name: "link-Profile",
-  components: { Genrerale, Projets, ViewLink, SkillCard },
+  components: { Genrerale, Projets, ViewLink, SkillCard, CreatePortfolio },
   data() {
     return {
       user: null as User | null,
       stats: 1 as 1 | 2 | 3,
       newSkill: "",
+      isModalOpen: false,
+      // Portfolio
+      images: [] as Portfolio[],
+      videos: [] as Portfolio[],
+      musiques: [] as Portfolio[],
     };
   },
   beforeMount() {
@@ -320,6 +344,16 @@ export default defineComponent({
       }
 
       this.user = data;
+      this.images = data.portfolios.filter((p) => p.type === "image");
+      this.videos = data.portfolios.filter((p) => p.type === "video");
+      this.musiques = data.portfolios.filter((p) => p.type === "musique");
+
+      if (this.images.length) {
+        for (const i of this.images) {
+          const path = getPortfolioImage(i.id);
+          i.path = path;
+        }
+      }
     },
     setStats(select: 1 | 2 | 3) {
       this.stats = select;
@@ -338,6 +372,21 @@ export default defineComponent({
     removeSkill(index: number) {
       if (!this.user) return;
       this.user.skills.splice(index, 1);
+    },
+    openModal() {
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      this.isModalOpen = false;
+    },
+    create(portfolio: Portfolio) {
+      if (portfolio.type === "image") {
+        this.images.push(portfolio);
+      } else if (portfolio.type === "video") {
+        this.videos.push(portfolio);
+      } else if (portfolio.type === "musique") {
+        this.musiques.push(portfolio);
+      }
     },
   },
   computed: {

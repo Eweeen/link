@@ -28,7 +28,7 @@ export class AuthController {
       res.cookie('refreshToken', response.getRefreshToken(), {
         expires: new Date(
           new Date().getTime() +
-            parseInt(process.env.JWT_REFRESH_TOKEN_EXPIRE) * 60 * 60 * 1000,
+            +process.env.JWT_REFRESH_TOKEN_EXPIRE * 60 * 60 * 1000,
         ),
         sameSite: 'strict',
         httpOnly: true,

@@ -33,11 +33,6 @@ export class SignUpDto {
   @IsString()
   password: string;
 
-  // @ApiProperty({ name: 'image' })
-  // @IsNotEmpty()
-  // @IsString()
-  // image: string;
-
   @ApiProperty({ name: 'birth_date' })
   @IsNotEmpty()
   @IsDateString()

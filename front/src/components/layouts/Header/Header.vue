@@ -14,7 +14,7 @@ import HeaderDesktop from "./HeaderDesktop.vue";
 import HeaderMobile from "./HeaderMobile.vue";
 import { mapGetters } from "vuex";
 import { logout } from "@/services/auth";
-import store from "@/store";
+import { store } from "@/store";
 
 export default defineComponent({
   name: "link-Header",

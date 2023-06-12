@@ -72,6 +72,7 @@ import NotConnectedSlot from "@/components/pages/shared/NotConnectedSlot.vue";
 import { LoginDto } from "@/validations/Login.dto";
 import { authentification } from "@/services/auth";
 import { createToken } from "@/utils/tokenUtils";
+import { newToast } from "@/store/modules/notification";
 
 export default defineComponent({
   name: "link-Login",
@@ -107,6 +108,7 @@ export default defineComponent({
         if (error?.statusCode === 401) {
           this.feedback = error.message;
         } else {
+          newToast("danger", "Une erreur est survenue", "", 5000);
           console.log(error.message);
         }
         this.loading = false;

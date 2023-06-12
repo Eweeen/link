@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
-import store from "@/store";
+import { store } from "@/store";
 import { DecodedJwtToken } from "@/interfaces/jwtToken.interface";
 import { refreshToken } from "../services/auth";
 

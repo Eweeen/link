@@ -6,7 +6,7 @@
         :value="modelValue"
         :type="type === 'password' ? (visible ? 'text' : 'password') : type"
         :placeholder="placeholder"
-        class="w-full bg-transparent text-white border-x-none border-t-none border-b-2 border-white outline-none pb-1 placeholder-white"
+        class="w-full bg-transparent text-white border-white placeholder-white border-x-none border-t-none border-b-2 outline-none pb-1"
         @input="
           $emit('update:modelValue', ($event.target as HTMLInputElement).value),
             error ? $emit('deleteError') : ''
@@ -52,6 +52,10 @@ export default defineComponent({
     type: {
       type: String,
       default: "text",
+    },
+    color: {
+      type: String,
+      default: "white",
     },
     error: {
       type: String,

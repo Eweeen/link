@@ -1,4 +1,5 @@
 import { Inspiration } from "./Inspiration";
+import { Portfolio } from "./Portfolio";
 import { Profession } from "./Profession";
 import { Skill } from "./Skill";
 
@@ -21,5 +22,5 @@ export interface User {
   genres: string[];
   skills: Skill[];
   inspirations: Inspiration[];
-  portfolios: string[];
+  portfolios: Portfolio[];
 }

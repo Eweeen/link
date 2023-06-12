@@ -22,6 +22,8 @@ import { ProfessionsModule } from './professions/professions.module';
 import { ProfessionsService } from './professions/professions.service';
 import { SkillsModule } from './skills/skills.module';
 import { SkillsService } from './skills/skills.service';
+import { PortfoliosModule } from './portfolios/portfolios.module';
+import { PortfoliosService } from './portfolios/portfolios.service';
 
 @Global()
 @Module({
@@ -52,6 +54,7 @@ import { SkillsService } from './skills/skills.service';
     InspirationsModule,
     ProfessionsModule,
     SkillsModule,
+    PortfoliosModule,
   ],
   providers: [
     // ? Use the ThrottlerGuard to prevent too many requests from the same IP.
@@ -65,6 +68,7 @@ import { SkillsService } from './skills/skills.service';
     InspirationsService,
     ProfessionsService,
     SkillsService,
+    PortfoliosService,
     SeederCommand,
   ],
   exports: [
@@ -74,6 +78,7 @@ import { SkillsService } from './skills/skills.service';
     InspirationsService,
     ProfessionsService,
     SkillsService,
+    PortfoliosService,
     SeederCommand,
   ],
   controllers: [AppController],

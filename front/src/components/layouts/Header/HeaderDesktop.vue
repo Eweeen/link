@@ -64,7 +64,7 @@ import HeaderItem, { HeaderI } from "./HeaderItem.vue";
 import SearchBar1 from "@/components/pages/home/SearchBar.vue";
 import { mapGetters } from "vuex";
 import { logout } from "@/services/auth";
-import store from "@/store";
+import { store } from "@/store";
 import MenuDropDown, {
   DopDownItems,
 } from "@/components/headlessui/MenuDropDown.vue";

@@ -4,16 +4,19 @@
     <router-view />
     <LinkFooter></LinkFooter>
   </div>
+
+  <Notifications />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import LinkHeader from "@/components/layouts/Header/Header.vue";
 import LinkFooter from "@/components/layouts/Footer.vue";
+import Notifications from "@/components/layouts/Notifications.vue";
 
 export default defineComponent({
   name: "link-Main",
-  components: { LinkHeader, LinkFooter },
+  components: { LinkHeader, LinkFooter, Notifications },
 });
 </script>
 
