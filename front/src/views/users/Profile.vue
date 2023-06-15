@@ -10,12 +10,6 @@
   >
     <header class="flex justify-between items-center">
       <h1 class="text-4xl font-semibold">Bienvenue {{ user.username }}</h1>
-      <!-- <span
-        class="flex gap-2 pb-0.5 items-center whitespace-nowrap cursor-pointer border-b border-transparent hover:border-black"
-      >
-        <img :src="require('@/assets/icons/linear/eye.svg')" class="w-6 h-6" />
-        Aperçu profil
-      </span> -->
     </header>
 
     <section class="mt-4 flex gap-9 mb-10">
@@ -38,7 +32,7 @@
                 class="w-[100px] h-[100px] rounded-full mb-2"
               />
               <h3 class="text-lg font-semibold">
-                {{ user.firstname + " " + user.lastname }}
+                {{ user.firstname }} {{ user.lastname }}
               </h3>
               <p class="text-gray-200">
                 {{ user.profession.name }}
@@ -46,24 +40,6 @@
             </div>
 
             <div class="flex flex-col gap-2">
-              <!-- Notes -->
-              <!-- <div class="flex gap-1 items-center">
-                <div
-                  v-for="i in 5"
-                  :key="i"
-                  class="bg-black border-white p-0.5 border-2 w-4 h-4 rounded-full"
-                >
-                  <div class="w-full h-full rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-white"
-                      :class="i === 5 ? 'w-[60%]' : 'w-full'"
-                    ></div>
-                  </div>
-                </div>
-
-                <span class="ml-1">(96 avis)</span>
-              </div> -->
-
               <div class="flex gap-1 items-center justify-center">
                 <img src="@/assets/icons/linear/location-white.svg" />
                 <span class="text-lg">{{ user.city }}</span>
@@ -98,16 +74,6 @@
                 </span>
                 <span>56</span>
               </div>
-              <!-- <div class="flex justify-between items-center">
-                <span class="flex gap-1 items-center">
-                  <img
-                    src="@/assets/icons/linear/lamp-on.svg"
-                    class="w-5 h-5"
-                  />
-                  Projets
-                </span>
-                <span>18</span>
-              </div> -->
             </div>
           </div>
         </div>
@@ -337,7 +303,13 @@ import { getPortfolioImage } from "@/services/portfolios";
 
 export default defineComponent({
   name: "link-Profile",
-  components: { Genrerale, Projets, ViewLink, SkillCard, CreatePortfolio },
+  components: {
+    Genrerale,
+    Projets,
+    ViewLink,
+    SkillCard,
+    CreatePortfolio,
+  },
   data() {
     return {
       user: null as User | null,
@@ -358,7 +330,7 @@ export default defineComponent({
       const { data, error } = await getUserById(id);
 
       if (error || !data) {
-        return console.log(error);
+        return;
       }
 
       this.user = data;
@@ -382,7 +354,7 @@ export default defineComponent({
 
       const { data, error } = await createSkill(this.newSkill, +this.getId);
 
-      if (error || !data) return console.log(error);
+      if (error || !data) return;
 
       this.user.skills.push(data);
       this.newSkill = "";

@@ -21,7 +21,7 @@
 
     <div class="flex items-center gap-10">
       <div
-        v-if="pageScroll || $route.path !== '/'"
+        v-if="(pageScroll || $route.path !== '/') && $route.path !== '/search'"
         class="flex flex-col gap-1 items-center justify-center cursor-pointer"
         @click="showSearchBar = !showSearchBar"
       >
@@ -49,10 +49,14 @@
 
     <transition name="dropDown">
       <div
-        v-if="showSearchBar && (pageScroll || $route.path !== '/')"
+        v-if="
+          showSearchBar &&
+          (pageScroll || $route.path !== '/') &&
+          $route.path !== '/search'
+        "
         class="fixed top-[84px] z-50 left-[50%] translate-x-[-50%] py-5 px-6 bg-black rounded-full"
       >
-        <SearchBar1 :darkTheme="true" class="flex-nowrap" />
+        <SearchBar :darkTheme="true" class="flex-nowrap" />
       </div>
     </transition>
   </div>
@@ -61,7 +65,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import HeaderItem, { HeaderI } from "./HeaderItem.vue";
-import SearchBar1 from "@/components/pages/home/SearchBar.vue";
+import SearchBar from "@/components/pages/home/SearchBar.vue";
 import { mapGetters } from "vuex";
 import { logout } from "@/services/auth";
 import { store } from "@/store";
@@ -73,7 +77,7 @@ export default defineComponent({
   name: "link-HeaderDesktop",
   components: {
     HeaderItem,
-    SearchBar1,
+    SearchBar,
     MenuDropDown,
   },
   data() {

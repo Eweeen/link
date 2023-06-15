@@ -2,6 +2,7 @@
   <form @submit.prevent class="flex gap-4 flex-wrap">
     <div class="relative w-full lg:w-fit">
       <input
+        v-model="profession"
         type="text"
         placeholder="Essayer ''Beatmaker''"
         class="border border-[3px] border-black text-black px-5 py-3 pl-14 rounded-full"
@@ -14,6 +15,7 @@
     </div>
     <div class="relative w-full lg:w-fit">
       <input
+        v-model="city"
         type="text"
         placeholder="Lieu de recherche ''Paris''"
         class="border border-[3px] border-black px-5 py-3 pl-14 rounded-full"
@@ -28,8 +30,8 @@
       type="submit"
       value="Rechercher"
       class="px-8 py-3 rounded-full cursor-pointer w-full lg:w-fit"
-      @click="$emit('changeVersion')"
       :class="inputDarkTheme"
+      @click="goToSearch"
     />
   </form>
 </template>
@@ -47,6 +49,36 @@ export default defineComponent({
     },
     inputSize: {
       type: String,
+    },
+  },
+  data() {
+    return {
+      profession: "",
+      city: "",
+    };
+  },
+  methods: {
+    goToSearch() {
+      let query = {};
+      if (this.profession !== "" && this.city !== "") {
+        query = {
+          profession: this.profession,
+          city: this.city,
+        };
+      } else if (this.profession !== "") {
+        query = {
+          profession: this.profession,
+        };
+      } else if (this.city !== "") {
+        query = {
+          city: this.city,
+        };
+      }
+
+      this.$router.push({
+        name: "search",
+        query: query,
+      });
     },
   },
   computed: {

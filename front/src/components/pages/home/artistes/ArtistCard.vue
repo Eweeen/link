@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <router-link :to="`/user/${user.username}`">
     <div
       class="w-[300px] lg:w-[400px] flex gap-5 p-4 bg-black rounded-t-2xl text-white"
     >
-      <img src="https://picsum.photos/100" class="rounded-full" />
+      <img src="@/assets/img/default.webp" class="rounded-full w-24 h-24" />
       <div class="flex flex-col gap-1">
         <div>
-          <p>Nom Prénom</p>
-          <p class="text-sm text-stone-300">Profession</p>
+          <p>{{ user.firstname }} {{ user.lastname }}</p>
+          <p class="text-sm text-stone-300">{{ user.profession.name }}</p>
         </div>
         <div class="flex items-center">
           <div class="flex items-center mr-2 gap-1">
@@ -23,24 +23,28 @@
         </div>
         <div class="flex items-center gap-1">
           <img src="@/assets/icons/linear/location-white.svg" />
-          <span>Paris</span>
+          <span>{{ user.city }}</span>
         </div>
       </div>
     </div>
     <div class="p-4 bg-white shadow rounded-b-2xl">
-      <p class="font-semibold">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-        purus metus, venenatis sit amet maximus.
-      </p>
+      <p class="font-semibold">{{ user.short_description }}</p>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { User } from "@/interfaces/User";
+import { PropType, defineComponent } from "vue";
 
 export default defineComponent({
   name: "link-ArtistCard",
+  props: {
+    user: {
+      type: Object as PropType<User>,
+      required: true,
+    },
+  },
 });
 </script>
 

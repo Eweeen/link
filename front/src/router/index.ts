@@ -14,6 +14,7 @@ import ProfileVisitor from "@/views/shared/ProfileVisitor.vue";
 import { createToken, createUserByToken, getToken } from "@/utils/tokenUtils";
 import { refreshToken } from "@/services/auth";
 import { store } from "@/store";
+import Search from "@/views/shared/Search.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/user/:username",
         name: "user",
         component: ProfileVisitor,
+      },
+      {
+        path: "/search",
+        name: "search",
+        component: Search,
       },
     ],
   },
@@ -106,6 +112,8 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  window.scrollTo(0, 0);
+
   // If the user is not connected and the route requires authentication
   const isConnected = await checkUserIsConnected(to);
   if (!isConnected && !routesNotLogged().includes(to.name?.toString() || "")) {

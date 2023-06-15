@@ -24,3 +24,8 @@ export interface User {
   inspirations: Inspiration[];
   portfolios: Portfolio[];
 }
+
+export interface PaginatedUsers {
+  nbPages: number;
+  result: User[];
+}

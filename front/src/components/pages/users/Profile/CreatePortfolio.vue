@@ -216,7 +216,6 @@ export default defineComponent({
         const { data, error } = await createPortfolio(this.portfolio, file);
 
         if (error || !data) {
-          console.log(error);
           return;
         }
 
@@ -229,7 +228,6 @@ export default defineComponent({
       const { data, error } = await createPortfolio(this.portfolio);
 
       if (error || !data) {
-        console.log(error);
         return;
       }
 
@@ -271,5 +269,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

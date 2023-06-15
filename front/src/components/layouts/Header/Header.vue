@@ -60,8 +60,7 @@ export default defineComponent({
   },
   methods: {
     async logout() {
-      const response = await logout();
-      console.info(response);
+      await logout();
       this.showProfileMenu = false;
       store.dispatch("LOGOUT");
       this.$router.push("/login");

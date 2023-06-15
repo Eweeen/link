@@ -5,8 +5,8 @@
   <!-- Porjets inspirants -->
   <HomeSection title="Les projets inspirants de la communauté" url="/">
     <div class="flex flex-wrap gap-4 justify-center">
-      <template v-for="item of 3" :key="item">
-        <ProjetCard />
+      <template v-for="p of projets" :key="p">
+        <ProjetCard :projet="p" />
       </template>
     </div>
   </HomeSection>
@@ -14,8 +14,8 @@
   <!-- Artistes du mois -->
   <HomeSection title="Les artistes du mois" url="/">
     <div class="overflow-x-auto flex gap-4 pb-[5px]">
-      <template v-for="item of 5" :key="item">
-        <ArtistCard />
+      <template v-for="u of users" :key="u">
+        <ArtistCard :user="u" />
       </template>
     </div>
   </HomeSection>
@@ -55,9 +55,14 @@
   <!-- Services recherchés -->
   <HomeSection title="Les services les plus recherchés" url="/">
     <div class="overflow-x-auto flex gap-4 pb-[5px]">
-      <template v-for="item of 7" :key="item">
-        <div class="bg-stone-200 rounded-2xl">
-          <div class="w-[300px] lg:w-[400px] h-[225px] lg:h-[225px]"></div>
+      <template v-for="i of 7" :key="i">
+        <div>
+          <div class="w-[367px] h-[249px] rounded-2xl overflow-hidden">
+            <img
+              :src="require(`@/assets/img/pictos/card-picto-${i}.svg`)"
+              class="w-full h-full"
+            />
+          </div>
         </div>
       </template>
     </div>
@@ -98,13 +103,47 @@ import { defineComponent } from "vue";
 import HomeSection from "@/components/pages/home/HomeSection.vue";
 import HomeSearch from "@/components/pages/home/HomeSearch.vue";
 import ArtistCard from "@/components/pages/home/artistes/ArtistCard.vue";
-import ProjetCard from "@/components/pages/home/projets/ProjetCard.vue";
+import ProjetCard, {
+  IProjet,
+} from "@/components/pages/home/projets/ProjetCard.vue";
+import { User } from "@/interfaces/User";
+import { getUsers } from "@/services/users";
 
 export default defineComponent({
   name: "HomeView",
   components: { HomeSection, HomeSearch, ArtistCard, ProjetCard },
   data() {
-    return {};
+    return {
+      users: [] as User[],
+      projets: [
+        {
+          id: 1,
+          title: "Projet 1",
+          date: "2021-09-01",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sapien est, gravida.",
+        },
+        {
+          id: 2,
+          title: "Projet 2",
+          date: "2021-09-01",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sapien est, gravida.",
+        },
+        {
+          id: 3,
+          title: "Projet 3",
+          date: "2021-09-01",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sapien est, gravida.",
+        },
+      ] as IProjet[],
+    };
+  },
+  async beforeMount() {
+    const users = await getUsers(undefined, undefined, 1);
+    if (!users.data) return;
+    this.users = users.data.result;
   },
 });
 </script>

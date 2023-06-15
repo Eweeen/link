@@ -66,7 +66,6 @@ export default defineComponent({
       const { error } = await signUp(this.userForm);
 
       if (error) {
-        console.log(error);
         return;
       }
 

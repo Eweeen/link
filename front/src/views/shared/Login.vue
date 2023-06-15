@@ -109,7 +109,6 @@ export default defineComponent({
           this.feedback = error.message;
         } else {
           newToast("danger", "Une erreur est survenue", "", 5000);
-          console.log(error.message);
         }
         this.loading = false;
         return;
@@ -118,7 +117,6 @@ export default defineComponent({
       // No data but no error
       if (!data) {
         this.loading = false;
-        console.log("No data");
         return;
       }
 

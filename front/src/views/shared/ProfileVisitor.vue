@@ -203,7 +203,6 @@ export default defineComponent({
       );
 
       if (error || !data) {
-        console.log(error);
         return;
       }
 
