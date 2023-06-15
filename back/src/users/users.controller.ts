@@ -14,12 +14,14 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/auth.decorator';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { SignUp } from './users.interface';
+import { PaginatedUsers, SignUp } from './users.interface';
 import { SignUpDto } from './dto/sign-up.dto';
 import { GenresService } from 'src/genres/genres.service';
 import { GenresUsersService } from 'src/genres-users/genres-users.service';
 import { InspirationsService } from 'src/inspirations/inspirations.service';
 import { CreateInspirationDto } from 'src/inspirations/dto/create-inspiration.dto';
+import { AccessToken } from 'src/common/cookies.decorator';
+import jwt from 'jsonwebtoken';
 
 @ApiTags('Users')
 @Controller({ version: '1', path: 'users' })
@@ -87,6 +89,21 @@ export class UsersController {
   @Auth('admin')
   async findAll(@Query('page') page: number) {
     return this.usersService.findAll(page);
+  }
+
+  @Get('/search')
+  async findAllExceptAdmin(
+    @Query('profession') profession: string,
+    @Query('city') city: string,
+    @Query('page') page?: number,
+    @AccessToken() accessToken?: string,
+  ): Promise<PaginatedUsers> {
+    const decodedToken = jwt.decode(accessToken);
+    const userId = decodedToken ? decodedToken['id'] : undefined;
+    profession = profession !== 'undefined' ? profession : undefined;
+    city = city !== 'undefined' ? city : undefined;
+
+    return this.usersService.findAllExceptAdmin(profession, city, userId, page);
   }
 
   @Get(':id')

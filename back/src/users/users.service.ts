@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { hashSync } from 'bcryptjs';
-import { DataSource, Equal } from 'typeorm';
+import { DataSource, Equal, Not } from 'typeorm';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -47,6 +47,47 @@ export class UsersService {
     };
   }
 
+  async findAllExceptAdmin(
+    profession?: string,
+    city?: string,
+    userId?: number,
+    page?: number,
+  ): Promise<PaginatedUsers> {
+    const whereQuery = {
+      role: { id: 3 },
+    };
+
+    if (profession) {
+      whereQuery['profession'] = { name: profession };
+    }
+
+    if (city) {
+      whereQuery['city'] = city;
+    }
+
+    if (userId) {
+      whereQuery['id'] = Not(Equal(userId));
+    }
+
+    const [users, nbLines] = await this.usersRepository().findAndCount({
+      skip: page ? 25 * (page - 1) : 0,
+      take: page ? 25 : 99999,
+      where: {
+        ...whereQuery,
+      },
+      relations: {
+        role: true,
+        profession: true,
+        inspirations: true,
+      },
+    });
+
+    return {
+      nbPages: page ? Math.ceil(nbLines / 25) : 1,
+      result: users,
+    };
+  }
+
   async findOne(id: number): Promise<User> {
     return await this.usersRepository().findOne({
       where: { id },
@@ -56,6 +97,7 @@ export class UsersService {
         inspirations: true,
         skills: true,
         portfolios: true,
+        genreUsers: true,
       },
     });
   }
@@ -76,6 +118,7 @@ export class UsersService {
         inspirations: true,
         skills: true,
         portfolios: true,
+        genreUsers: { genre: true },
       },
     });
   }

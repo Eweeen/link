@@ -60,7 +60,7 @@ export class AuthController {
     } else {
       throw new HttpException(
         `La requête a été envoyé sans cookies`,
-        HttpStatus.NOT_FOUND,
+        HttpStatus.NOT_ACCEPTABLE,
       );
     }
   }
